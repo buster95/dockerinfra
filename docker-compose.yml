@@ -42,9 +42,6 @@ services:
       MSSQL_AGENT_ENABLED: 1
     cap_add:
       - SYS_PTRACE
-    # command: bash -c "
-    #   useradd -M -s /bin/bash -u 10001 -g 0 mssql
-    #   && mkdir -p -m 770 /var/opt/mssql && chgrp -R 0 /var/opt/mssql"
     ports:
       - 1433:1433
       - 1434:1433
