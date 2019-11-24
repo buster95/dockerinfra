@@ -48,6 +48,5 @@ services:
     ports:
       - 1433:1433
       - 1434:1433
-      - 1435:1433
     volumes:
       - /home/buster/containers_data/mssql:/var/opt/mssql
