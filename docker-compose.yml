@@ -8,7 +8,7 @@ services:
     build:
       context: ./
       dockerfile: ./adminer.dockerfile
-    image: adminer:v1-all
+    image: adminer:1.0.0fd
     container_name: dbadminer
     restart: always
     ports:
@@ -31,7 +31,7 @@ services:
     build:
       context: ./
       dockerfile: ./mssql.dockerfile
-    image: mssql:v1-non-root
+    image: mssql:1.0.0fd
     container_name: localmssql
     restart: always
     environment:
