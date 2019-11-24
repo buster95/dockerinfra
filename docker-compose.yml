@@ -1,0 +1,53 @@
+# Use root/example as user/password credentials
+# docker build -f dockermysql.yml
+# COMMAND: docker-compose -f dockermysql.yml up -d
+version: '3.1'
+services:
+
+  adminer:
+    build:
+      context: ./
+      dockerfile: ./adminer.dockerfile
+    image: adminer:v1-all
+    container_name: dbadminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  db:
+    image: mysql:8.0.17
+    container_name: localmysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - 3306:3306
+    volumes:
+      - /home/buster/containers_data/mysql:/var/lib/mysql
+
+  # db2:
+  #   # image: mcr.microsoft.com/mssql/server:latest
+  #   build:
+  #     context: ./
+  #     dockerfile: ./mssql.dockerfile
+  #   image: mssql:v1-non-root
+  #   container_name: localmssql
+  #   restart: always
+  #   environment:
+  #     TZ: America/Managua 
+  #     ACCEPT_EULA: Y
+  #     SA_PASSWORD: StrongPassword@07
+  #     MSSQL_PID: Developer
+  #     MSSQL_AGENT_ENABLED: 1
+  #   cap_add:
+  #     - SYS_PTRACE
+  #   # command: bash -c "
+  #   #   useradd -M -s /bin/bash -u 10001 -g 0 mssql
+  #   #   && mkdir -p -m 770 /var/opt/mssql && chgrp -R 0 /var/opt/mssql"
+  #   ports:
+  #     - 1433:1433
+  #     - 1434:1433
+  #     - 1435:1433
+  #   volumes:
+  #     - /home/buster/containers_data/mssql:/var/opt/mssql
