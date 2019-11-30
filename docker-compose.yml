@@ -24,14 +24,16 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - /home/buster/containers_data/mysql:/var/lib/mysql
+      # - /home/buster/containers_data/mysql:/var/lib/mysql
+      - C:\containers_data\mysql:/var/lib/mysql
 
   mssql:
     # image: mcr.microsoft.com/mssql/server:latest
-    build:
-      context: ./
-      dockerfile: ./mssql.dockerfile
-    image: mssql:1.0.0fd
+    image: microsoft/mssql-server-linux:2017-CU13
+    # build:
+      # context: ./
+      # dockerfile: ./mssql.dockerfile
+    # image: mssql:1.0.0fd
     container_name: localmssql
     restart: always
     environment:
@@ -46,4 +48,5 @@ services:
       - 1433:1433
       - 1434:1433
     volumes:
-      - /home/buster/containers_data/mssql:/var/opt/mssql
+      # - /home/buster/containers_data/mssql:/var/opt/mssql
+      - C:\containers_data\mssql:/var/opt/mssql
