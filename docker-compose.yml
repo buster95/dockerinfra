@@ -12,7 +12,7 @@ services:
     container_name: dbadminer
     restart: always
     ports:
-      - 8080:8080
+      - 81:8080
 
   mysql:
     image: mysql:8.0.17
