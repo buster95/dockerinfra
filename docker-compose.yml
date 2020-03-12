@@ -1,9 +1,8 @@
 # Use root/example as user/password credentials
 # docker build -f dockermysql.yml
 # COMMAND: docker-compose -f dockermysql.yml up -d
-version: '3.3'
+version: "3.3"
 services:
-
   dbadminer:
     build:
       context: ./
@@ -13,6 +12,16 @@ services:
     restart: always
     ports:
       - 81:8080
+
+  postgre:
+    image: postgres:9.6.17
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - 5432:5432
+    volumes:
+      - C:\containers_data\postgres\data:/var/lib/postgresql/data
 
   mysql:
     image: mysql:8.0.17
@@ -28,16 +37,19 @@ services:
       - C:\containers_data\mysql:/var/lib/mysql
 
   mssql:
-    # image: mcr.microsoft.com/mssql/server:latest
-    image: microsoft/mssql-server-linux:2017-CU13
+    # image: mcr.microsoft.com/mssql/server:2017-CU13
+    # image: microsoft/mssql-server-linux:2017-CU13
+    # image: mcr.microsoft.com/mssql/server:2017-CU19-ubuntu-16.04
+    image: mcr.microsoft.com/mssql/server:2019-CU2-ubuntu-16.04
     # build:
-      # context: ./
-      # dockerfile: ./mssql.dockerfile
+    # context: ./
+    # dockerfile: ./mssql.dockerfile
     # image: mssql:1.0.0fd
+    # user: root
     container_name: localmssql
     restart: always
     environment:
-      TZ: America/Managua 
+      TZ: America/Managua
       ACCEPT_EULA: Y
       SA_PASSWORD: StrongPassword@07
       MSSQL_PID: Developer
@@ -48,5 +60,6 @@ services:
       - 1433:1433
       - 1434:1433
     volumes:
+      - C:\containers_data\mssql:/var/opt/mssql/data
       # - /home/buster/containers_data/mssql:/var/opt/mssql
-      - C:\containers_data\mssql:/var/opt/mssql
+      # - C:\containers_data\mssql:/var/opt/mssql
