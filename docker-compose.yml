@@ -13,15 +13,23 @@ services:
     ports:
       - 81:8080
 
-  postgre:
-    image: postgres:9.6.17
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: 123456
-    ports:
-      - 5432:5432
-    volumes:
-      - C:\containers_data\postgres\data:/var/lib/postgresql/data
+  # postgres:
+  #   image: postgres:9.6.17
+  #   container_name: localpostgres
+  #   restart: always
+  #   user: postgres
+  #   environment:
+  #     POSTGRES_HOST_AUTH_METHOD: trust
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: 123456
+  #     # POSTGRES_DB: db
+  #     # PGDATA: /data
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     # - C:\containers_data\postgres\data:/data
+  #     - C:\containers_data\postgres\data:/var/lib/postgresql/data
+  #     # - C:\containers_data\postgres:/var/lib/postgresql
 
   mysql:
     image: mysql:8.0.17
@@ -63,3 +71,15 @@ services:
       - C:\containers_data\mssql:/var/opt/mssql/data
       # - /home/buster/containers_data/mssql:/var/opt/mssql
       # - C:\containers_data\mssql:/var/opt/mssql
+
+  redis:
+    image: redis:5.0.8-buster
+    restart: always
+    environment:
+      REDIS_PASSWORD: 123456
+    ports:
+      - 6379:6379
+# volumes:
+#   - name: postgres_database
+#     hostPath:
+#       path: /var/lib/docker/pgdata
