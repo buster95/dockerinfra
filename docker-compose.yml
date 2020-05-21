@@ -1,7 +1,7 @@
 # Use root/example as user/password credentials
 # docker build -f dockermysql.yml
 # COMMAND: docker-compose -f dockermysql.yml up -d
-version: "3.3"
+version: "3.7"
 services:
   dbadminer:
     build:
@@ -54,6 +54,7 @@ services:
     # dockerfile: ./mssql.dockerfile
     # image: mssql:1.0.0fd
     # user: root
+    command: []
     container_name: localmssql
     restart: always
     environment:
@@ -69,17 +70,33 @@ services:
       - 1434:1433
     volumes:
       - C:\containers_data\mssql:/var/opt/mssql/data
+      # - data_mssql:/var/opt/mssql/data
       # - /home/buster/containers_data/mssql:/var/opt/mssql
       # - C:\containers_data\mssql:/var/opt/mssql
+  
+  mongodb:
+    image: mongo:4.2.6
+    container_name: localmongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    volumes:
+      - data-mongo:/data/db
+    ports:
+      - 27017:27017
 
   redis:
     image: redis:5.0.8-buster
+    container_name: localredis
     restart: always
     environment:
       REDIS_PASSWORD: 123456
     ports:
       - 6379:6379
-# volumes:
-#   - name: postgres_database
-#     hostPath:
-#       path: /var/lib/docker/pgdata
+    volumes:
+      - data-redis:/data
+
+volumes:
+  data-redis:
+  data-mongo:
