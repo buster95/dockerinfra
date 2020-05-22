@@ -47,14 +47,20 @@ services:
   mssql:
     # image: mcr.microsoft.com/mssql/server:2017-CU13
     # image: microsoft/mssql-server-linux:2017-CU13
-    # image: mcr.microsoft.com/mssql/server:2017-CU19-ubuntu-16.04
-    image: mcr.microsoft.com/mssql/server:2019-CU2-ubuntu-16.04
+    image: mcr.microsoft.com/mssql/server:2017-CU19-ubuntu-16.04
+    # image: mcr.microsoft.com/mssql/server:2019-CU2-ubuntu-16.04
     # build:
-    # context: ./
-    # dockerfile: ./mssql.dockerfile
-    # image: mssql:1.0.0fd
+    #   context: ./
+    #   dockerfile: ./mssql.dockerfile
+    # image: buster95/mssql:2019-CU2-ubuntu-16.04
     # user: root
-    command: []
+    # ls -laR /var/opt/mssql
+    # docker run -it --rm -v C:\containers_data\mssql:/var/opt/mssql --user root mcr.microsoft.com/mssql/server:2019-CU2-ubuntu-16.04 bash
+    # command: >
+    #   bash -c "chgrp -R 0 /var/opt/mssql
+    #   && chmod -R g=u /var/opt/mssql
+    #   && chown -R 10001:0 /var/opt/mssql
+    #   && exit"
     container_name: localmssql
     restart: always
     environment:
@@ -67,13 +73,13 @@ services:
       - SYS_PTRACE
     ports:
       - 1433:1433
-      - 1434:1433
+      # - 1434:1433
     volumes:
-      - C:\containers_data\mssql:/var/opt/mssql/data
-      # - data_mssql:/var/opt/mssql/data
+      - data-mssql:/var/opt/mssql/data
+      # - C:\containers_data\mssql:/var/opt/mssql/data
       # - /home/buster/containers_data/mssql:/var/opt/mssql
       # - C:\containers_data\mssql:/var/opt/mssql
-  
+
   mongodb:
     image: mongo:4.2.6
     container_name: localmongo
@@ -98,5 +104,6 @@ services:
       - data-redis:/data
 
 volumes:
+  data-mssql:
   data-redis:
   data-mongo:
