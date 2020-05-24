@@ -1,9 +1,11 @@
 # Exmple of creating a container image that will run as a user 'mssql' instead of root
 # This is example is based on the official image from Microsoft and effectively changes the user that SQL Server runs as
 # and allows for dumps to generate as a non-root user
-FROM mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+# FROM mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+# FROM mcr.microsoft.com/mssql/server:2019-CU2-ubuntu-16.04
+FROM mcr.microsoft.com/mssql/server:2017-CU19-ubuntu-16.04
 
-USER root
+# USER root
 # Create non-root user and update permissions
 #
 # RUN useradd -M -s /bin/bash -u 10001 -g 0 mssql
@@ -14,7 +16,7 @@ USER root
 # RUN setcap 'cap_net_bind_service+ep' /opt/mssql/bin/sqlservr
 
 # Allow dumps from the non-root process
-# 
+#
 # RUN setcap 'cap_sys_ptrace+ep' /opt/mssql/bin/paldumper
 # RUN setcap 'cap_sys_ptrace+ep' /usr/bin/gdb
 
@@ -25,5 +27,12 @@ USER root
 # RUN echo -e "# mssql libs\n/opt/mssql/lib" >> /etc/ld.so.conf.d/mssql.conf
 # RUN ldconfig
 
-# USER mssql
+# PERMISSIONS
+# RUN ls -alR /var/opt
+# RUN chgrp -R 0 /var/opt
+# RUN chmod -R g=u /var/opt
+# RUN chown -R 10001:0 /var/opt
+# RUN ls -alR /var/opt
+
+USER mssql 
 CMD ["/opt/mssql/bin/sqlservr"]
