@@ -45,10 +45,10 @@ services:
       - C:\containers_data\mysql:/var/lib/mysql
 
   mssql:
-    # image: mcr.microsoft.com/mssql/server:2017-CU13
     # image: microsoft/mssql-server-linux:2017-CU13
-    image: mcr.microsoft.com/mssql/server:2017-CU20-ubuntu-16.04
-    # image: mcr.microsoft.com/mssql/server:2019-CU2-ubuntu-16.04
+    # image: mcr.microsoft.com/mssql/server:2017-CU13
+    # image: mcr.microsoft.com/mssql/server:2017-CU20-ubuntu-16.04
+    image: mcr.microsoft.com/mssql/server:2017-CU24-ubuntu-16.04
     # build:
     #   context: ./
     #   dockerfile: ./mssql.dockerfile
@@ -63,9 +63,10 @@ services:
     #   && exit"
     container_name: localmssql
     restart: always
+    user: root
     environment:
       TZ: America/Managua
-      ACCEPT_EULA: Y
+      ACCEPT_EULA: "Y"
       SA_PASSWORD: StrongPassword@07
       MSSQL_PID: Developer
       MSSQL_AGENT_ENABLED: 1
@@ -75,8 +76,8 @@ services:
       - 1433:1433
       # - 1434:1433
     volumes:
-      - data-mssql:/var/opt/mssql/data
-      # - C:\containers_data\mssql:/var/opt/mssql/data
+      - C:\containers_data\mssql:/var/opt/mssql/data
+      # - data-mssql:/var/opt/mssql/data
       # - /home/buster/containers_data/mssql:/var/opt/mssql
       # - C:\containers_data\mssql:/var/opt/mssql
 
@@ -88,7 +89,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
     volumes:
-      - data-mongo:/data/db
+      - C:\containers_data\mongo:/data/db
     ports:
       - 27017:27017
 
@@ -105,5 +106,5 @@ services:
 
 volumes:
   data-mssql:
+  data-mysql:
   data-redis:
-  data-mongo:
