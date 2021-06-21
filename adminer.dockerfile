@@ -1,4 +1,4 @@
-FROM adminer:4.7.5
+FROM adminer:4.8.1-standalone
 USER root
 RUN apk update && apk add freetds freetds-dev \
     && docker-php-ext-install pdo_dblib
