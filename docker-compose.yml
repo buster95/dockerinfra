@@ -31,70 +31,104 @@ services:
   #     - C:\containers_data\postgres\data:/var/lib/postgresql/data
   #     # - C:\containers_data\postgres:/var/lib/postgresql
 
-  mysql:
-    image: mysql:8.0.17
-    container_name: localmysql
-    command: --default-authentication-plugin=mysql_native_password
+  # mysql:
+  #   image: mysql:8.0.17
+  #   container_name: localmysql
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 123456
+  #   ports:
+  #     - 3306:3306
+  #   volumes:
+  #     - /Users/buster95/containers_data/mysql:/var/lib/mysql  # MACOS
+  #     # - /home/buster/containers_data/mysql:/var/lib/mysql
+  #     # - C:\containers_data\mysql:/var/lib/mysql  # WINDOWS
+
+  mariadb:
+    image: mariadb:10.6.3-focal
+    container_name: localmariadb
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123456
     ports:
       - 3306:3306
     volumes:
-      # - /home/buster/containers_data/mysql:/var/lib/mysql
-      - C:\containers_data\mysql:/var/lib/mysql
+      - /Users/buster95/containers_data/mysql:/var/lib/mysql  # MACOS
 
-  mssql:
-    # image: microsoft/mssql-server-linux:2017-CU13
-    # image: mcr.microsoft.com/mssql/server:2017-CU13
-    # image: mcr.microsoft.com/mssql/server:2017-CU20-ubuntu-16.04
-    image: mcr.microsoft.com/mssql/server:2017-CU24-ubuntu-16.04
-    # build:
-    #   context: ./
-    #   dockerfile: ./mssql.dockerfile
-    # image: buster95/mssql:2019-CU2-ubuntu-16.04
-    # user: root
-    # ls -laR /var/opt/mssql
-    # docker run -it --rm -v C:\containers_data\mssql:/var/opt/mssql --user root mcr.microsoft.com/mssql/server:2019-CU2-ubuntu-16.04 bash
-    # command: >
-    #   bash -c "chgrp -R 0 /var/opt/mssql
-    #   && chmod -R g=u /var/opt/mssql
-    #   && chown -R 10001:0 /var/opt/mssql
-    #   && exit"
-    container_name: localmssql
-    restart: always
+
+  # mssql:
+  #   # image: microsoft/mssql-server-linux:2017-CU13
+  #   # image: mcr.microsoft.com/mssql/server:2017-CU13
+  #   # image: mcr.microsoft.com/mssql/server:2017-CU20-ubuntu-16.04
+  #   # image: mcr.microsoft.com/mssql/server:2017-CU24-ubuntu-16.04
+  #   image: mcr.microsoft.com/mssql/server:2019-latest
+  #   # build:
+  #   #   context: ./
+  #   #   dockerfile: ./mssql.dockerfile
+  #   # image: buster95/mssql:2019-CU2-ubuntu-16.04
+  #   # user: root
+  #   # ls -laR /var/opt/mssql
+  #   # docker run -it --rm -v C:\containers_data\mssql:/var/opt/mssql --user root mcr.microsoft.com/mssql/server:2019-CU2-ubuntu-16.04 bash
+  #   # command: >
+  #   #   bash -c "chgrp -R 0 /var/opt/mssql
+  #   #   && chmod -R g=u /var/opt/mssql
+  #   #   && chown -R 10001:0 /var/opt/mssql
+  #   #   && exit"
+  #   container_name: localmssql
+  #   restart: always
+  #   user: root
+  #   environment:
+  #     TZ: America/Managua
+  #     ACCEPT_EULA: "Y"
+  #     SA_PASSWORD: StrongPassword@07
+  #     MSSQL_PID: Developer
+  #     MSSQL_AGENT_ENABLED: 1
+  #   cap_add:
+  #     - SYS_PTRACE
+  #   ports:
+  #     - 1433:1433
+  #     # - 1434:1433
+  #   volumes:
+  #     # - /Users/buster95/containers_data/mssql:/var/opt/mssql/data  # THIS CONFIG FOR MACOS
+  #     # - C:\containers_data\mssql:/var/opt/mssql/data # THIS CONFIG FOR WINDOWS
+  #     - data-mssql:/var/opt/mssql/data  # THIS CONFIG FOR DOCKER VOLUMES
+  #     # - /home/buster/containers_data/mssql:/var/opt/mssql
+  #     # - C:\containers_data\mssql:/var/opt/mssql
+
+  azuresql:
+    image: mcr.microsoft.com/azure-sql-edge:1.0.4
+    container_name: localazuresql
     user: root
-    environment:
-      TZ: America/Managua
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: StrongPassword@07
-      MSSQL_PID: Developer
-      MSSQL_AGENT_ENABLED: 1
+    restart: always
     cap_add:
       - SYS_PTRACE
     ports:
       - 1433:1433
-      # - 1434:1433
-    volumes:
-      - C:\containers_data\mssql:/var/opt/mssql/data
-      # - data-mssql:/var/opt/mssql/data
-      # - /home/buster/containers_data/mssql:/var/opt/mssql
-      # - C:\containers_data\mssql:/var/opt/mssql
+      - 1434:1433
+      - 1401:1401
+    environment:
+      TZ: America/Managua
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: StrongPassword@07
+      MSSQL_PID: Developer
+      MSSQL_AGENT_ENABLED: 1
 
   mongodb:
-    image: mongo:4.2.6
+    image: mongo:4.0.26
     container_name: localmongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
     volumes:
-      - C:\containers_data\mongo:/data/db
+      - /Users/buster95/containers_data/mongo:/data/db  # MACOS
+      # - C:\containers_data\mongo:/data/db  # WINDOWS
     ports:
       - 27017:27017
 
   redis:
-    image: redis:5.0.8-buster
+    image: redis:6.2.5-alpine
     container_name: localredis
     restart: always
     environment:
@@ -105,6 +139,6 @@ services:
       - data-redis:/data
 
 volumes:
-  data-mssql:
-  data-mysql:
   data-redis:
+  # data-mssql:
+  # data-mysql:
