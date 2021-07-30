@@ -1,0 +1,79 @@
+# Use root/example as user/password credentials
+# docker build -f dockermysql.yml
+# COMMAND: docker-compose -f dockermysql.yml up -d
+version: "3.7"
+services:
+  dbadminer:
+    build:
+      context: ./
+      dockerfile: ./adminer.dockerfile
+    image: adminer:1.0.0fd
+    container_name: dbadminer
+    restart: always
+    ports:
+      - 81:8080
+
+  mariadb:
+    image: mariadb:10.6.3-focal
+    container_name: localmariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - 3306:3306
+    volumes:
+      - /Users/buster95/containers_data/mysql:/var/lib/mysql # MACOS
+
+  azurestorage:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: localazurite
+    restart: always
+    ports:
+      - 10001:10001
+      - 10000:10000
+
+  azuresql:
+    image: mcr.microsoft.com/azure-sql-edge:1.0.4
+    container_name: localazuresql
+    user: root
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    ports:
+      - 1433:1433
+      # - 1401:1401
+      # - 1434:1433
+    environment:
+      TZ: America/Managua
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: StrongPassword@07
+      MSSQL_PID: Developer
+      MSSQL_AGENT_ENABLED: 1
+
+  mongodb:
+    image: mongo:4.0.26
+    container_name: localmongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    volumes:
+      - /Users/buster95/containers_data/mongo:/data/db
+    ports:
+      - 27017:27017
+
+  redis:
+    image: redis:6.2.5-alpine
+    container_name: localredis
+    restart: always
+    environment:
+      REDIS_PASSWORD: 123456
+    ports:
+      - 6379:6379
+    volumes:
+      - data-redis:/data
+
+volumes:
+  data-redis:
+  # data-mssql:
+  # data-mysql:
