@@ -3,15 +3,15 @@
 # COMMAND: docker-compose -f dockermysql.yml up -d
 version: "3.7"
 services:
-  dbadminer:
-    build:
-      context: ./
-      dockerfile: ./adminer.dockerfile
-    image: adminer:1.0.0fd
-    container_name: dbadminer
-    restart: always
-    ports:
-      - 81:8080
+  # dbadminer:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./adminer.dockerfile
+  #   image: adminer:1.0.0fd
+  #   container_name: dbadminer
+  #   restart: always
+  #   ports:
+  #     - 81:8080
 
   mariadb:
     image: mariadb:10.6.3-focal
@@ -50,6 +50,19 @@ services:
       MSSQL_PID: Developer
       MSSQL_AGENT_ENABLED: 1
 
+  postgres:
+    image: postgres:15.1-bullseye
+    container_name: localpostgres
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: example123
+      PGDATA: /data/postgres
+    volumes:
+      - ~/containers_data/postgres-15.1:/data/postgres
+
   mongodb:
     image: mongo:4.0.26
     container_name: localmongo
@@ -58,9 +71,45 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
     volumes:
-      - /Users/buster95/containers_data/mongo:/data/db
+      - /Users/buster95/containers_data/mongo-4.0.26:/data/db
     ports:
       - 27017:27017
+
+  # mongo:
+  #   image: 'bitnami/mongodb:5.0.15'
+  #   container_name: localmongo
+  #   restart: always
+  #   environment:
+  #     - MONGODB_ADVERTISED_HOSTNAME=127.0.0.1
+  #     - MONGODB_REPLICA_SET_MODE=primary
+  #     - MONGODB_ROOT_USER=root
+  #     - MONGODB_ROOT_PASSWORD=123456
+  #     - MONGODB_REPLICA_SET_KEY=replicasetkey123
+  #   ports:
+  #     - 27018:27017
+  #   volumes:
+  #     - /Users/buster95/containers_data/mongo-5.0.15:/bitnami/mongodb'
+
+  # mongodb:
+  #   image: mongo:5.0.15
+  #   container_name: localmongo
+  #   hostname: localmongo
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: 123456
+  #     MONGO_REPLICA_SET_MODE: primary
+  #     MONGO_REPLICA_SET_NAME: rs0
+  #   volumes:
+  #     - ~/containers_data/mongo-5.0.15:/data/db
+  #     - ./mongo-keyfile:/opt/keyfile
+  #   ports:
+  #     - 27017:27017
+  #   healthcheck:
+  #     test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u $${MONGO_INITDB_ROOT_USERNAME} -p  $${MONGO_INITDB_ROOT_PASSWORD} --quiet) -eq 1
+  #     interval: 10s
+  #     start_period: 30s
+  #   command: "--bind_ip_all --keyFile /opt/keyfile/keyfile --replSet rs0"
 
   redis:
     image: redis:6.2.5-alpine
@@ -72,8 +121,17 @@ services:
       - 6379:6379
     volumes:
       - data-redis:/data
+  # oracle:
+  #   build:
+  #     context: ./oracle
+  #     dockerfile: ./Dockerfile
+  #   image: oracle-19.3.0c
+  #   container_name: localoracle
+  #   restart: always
+  #   ports:
+  #     - 1521:1521
 
 volumes:
   data-redis:
-  # data-mssql:
-  # data-mysql:
+    # data-mssql:
+    # data-mysql:
