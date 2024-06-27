@@ -1,7 +1,8 @@
 # Use root/example as user/password credentials
 # docker build -f dockermysql.yml
 # COMMAND: docker-compose -f dockermysql.yml up -d
-version: "3.7"
+name: docker-compose-macos
+
 services:
   # dbadminer:
   #   build:
@@ -24,31 +25,31 @@ services:
     volumes:
       - /Users/buster95/containers_data/mysql:/var/lib/mysql # MACOS
 
-  azurestorage:
-    image: mcr.microsoft.com/azure-storage/azurite
-    container_name: localazurite
-    restart: always
-    ports:
-      - 10001:10001
-      - 10000:10000
+  # azurestorage:
+  #   image: mcr.microsoft.com/azure-storage/azurite
+  #   container_name: localazurite
+  #   restart: always
+  #   ports:
+  #     - 10001:10001
+  #     - 10000:10000
 
-  azuresql:
-    image: mcr.microsoft.com/azure-sql-edge:1.0.4
-    container_name: localazuresql
-    user: root
-    restart: always
-    cap_add:
-      - SYS_PTRACE
-    ports:
-      - 1433:1433
-      # - 1401:1401
-      # - 1434:1433
-    environment:
-      TZ: America/Managua
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: StrongPassword@07
-      MSSQL_PID: Developer
-      MSSQL_AGENT_ENABLED: 1
+  # azuresql:
+  #   image: mcr.microsoft.com/azure-sql-edge:1.0.4
+  #   container_name: localazuresql
+  #   user: root
+  #   restart: always
+  #   cap_add:
+  #     - SYS_PTRACE
+  #   ports:
+  #     - 1433:1433
+  #     # - 1401:1401
+  #     # - 1434:1433
+  #   environment:
+  #     TZ: America/Managua
+  #     ACCEPT_EULA: "Y"
+  #     MSSQL_SA_PASSWORD: StrongPassword@07
+  #     MSSQL_PID: Developer
+  #     MSSQL_AGENT_ENABLED: 1
 
   postgres:
     image: postgres:15.1-bullseye
